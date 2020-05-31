@@ -7,5 +7,6 @@ int main()
 {
     Board b(8, 8, 10);
     b.PrintBoard();
+    b.click(2, 2, 'O');
     return 0;
 }

@@ -131,3 +131,53 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
     }
     return nbrs;
 }
+
+bool Board::click(int row, int col, char commend)
+{
+    char upCommend = toupper(commend);
+    Cell &cell = cells[row][col];
+
+    if (cell.IS_OPEN)
+    {
+        return true;
+    }
+    switch (upCommend)
+    {
+    case 'O':
+        if (cell.IS_FLAG)
+        {
+            return true;
+        }
+        openCell(row, col);
+        return lose;
+
+    case 'P':
+        cell.state = State::flag;
+        mines--;
+        return true;
+
+    default:
+        return true;
+    }
+}
+
+void Board::openCell(int row, int col)
+{
+    Cell &cell = cells[row][col];
+
+    if (cell.IS_FLAG)
+    {
+        return;
+    }
+    cell.state = State::open;
+    if (cell.IS_BOMB)
+    {
+        std::cout << "Loooooseerrrrrr" << endl;
+        lose = true;
+        return;
+    }
+    if (cell.IS_EMPTY)
+    {
+        // TODO openNeighbors(row, col);
+    }
+}
