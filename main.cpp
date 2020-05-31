@@ -41,6 +41,11 @@ Board settings()
 
 int main()
 {
+    /*todo: 
+    Ass mood - cB(r, c) -> if cell != empty then try again (spinner?)
+    If clsNbrs+flags == value then flagNbrs.
+     */
+
     Board b = settings();
     do
     {
