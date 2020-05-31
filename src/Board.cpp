@@ -35,7 +35,6 @@ void Board::PrintBoard(bool showAll)
         std::cout << (i + 1) % 10 << " ";
         for (int j = 0; j < width; ++j)
         {
-            //Cell &cell = cells[i][j];
             Cell &cell = cells2(i, j);
             char v = '#';
             if (cell.state == State::open || showAll)
@@ -60,12 +59,6 @@ Board::Board(int height, int width, int mines)
     this->height = height;
     this->width = width;
     this->mines = mines;
-
-    cells = (Cell **)(calloc(height, sizeof(Cell *)));
-    for (int i = 0; i < height; i++)
-    {
-        cells[i] = (Cell *)(calloc(width, sizeof(Cell)));
-    }
 
     for (int i = 0; i < height; i++)
     {
@@ -173,7 +166,6 @@ bool Board::createBoard()
             continue;
         }
 
-        //cells[row][col].value = -1;
         cells2(row, col).value = -1;
         placedMines++;
         genereteNumbers(row, col);
@@ -217,7 +209,6 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
                 continue;
             else if (inBoard(row + j, col + i))
             {
-                //nbrs.push_back(&cells[row + j][col + i]);
                 nbrs.push_back(&cells2(row + j, col + i));
             }
         }
@@ -228,7 +219,6 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
 bool Board::click(int row, int col, char commend)
 {
     char upCommend = toupper(commend);
-    //Cell &cell = cells[row][col];
     Cell &cell = cells2(row, col);
 
     if (cell.IS_OPEN)
@@ -275,7 +265,6 @@ bool Board::click(int row, int col, char commend)
 
 void Board::openCell(int row, int col)
 {
-    //Cell &cell = cells[row][col];
     Cell &cell = cells2(row, col);
 
     if (cell.IS_FLAG)

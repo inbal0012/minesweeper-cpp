@@ -11,7 +11,6 @@ class Board
 {
 private:
     int height, width, mines, flags = 0;
-    Cell **cells;
     std::map<point, Cell> cells2;
     bool lose = false, win = false;
 
