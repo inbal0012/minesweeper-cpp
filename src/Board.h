@@ -1,13 +1,18 @@
 #include "Cell.h"
 #include <vector>
+#include <map>
 
 #define SIZE 8
+
+typedef std::pair<int, int> point;
+typedef std::map<point, Cell> metrix;
 
 class Board
 {
 private:
     int height, width, mines, flags = 0;
     Cell **cells;
+    std::map<point, Cell> cells2;
     bool lose = false;
 
     void printHorizontalLine();

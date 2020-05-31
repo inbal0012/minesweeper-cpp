@@ -5,6 +5,7 @@
 #include <time.h>   /* time */
 
 using namespace std;
+#define cells2(row, col) (cells2[make_pair(row, col)])
 
 //prints
 void Board::printHorizontalLine()
@@ -31,7 +32,8 @@ void Board::PrintBoard(bool showAll)
         std::cout << (i + 1) % 10 << " ";
         for (int j = 0; j < width; ++j)
         {
-            Cell &cell = cells[i][j];
+            //Cell &cell = cells[i][j];
+            Cell &cell = cells2(i, j);
             char v = '#';
             if (cell.state == State::open || showAll)
                 v = char(cell.value < 0 ? 'X' : cell.IS_EMPTY ? ' ' : cell.value + '0'); //nested lamda. if bomb - x, if empty -> ' ', else show num
@@ -55,6 +57,15 @@ Board::Board(int height, int width, int mines)
     for (int i = 0; i < height; i++)
     {
         cells[i] = (Cell *)(calloc(width, sizeof(Cell)));
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            Cell cell;
+            cells2.insert(make_pair(make_pair(i, j), cell));
+        }
     }
 
     createBoard();
@@ -81,12 +92,13 @@ bool Board::createBoard()
         {
             continue;
         }
-        if (cells[row][col].IS_BOMB)
+        if (cells2(row, col).IS_BOMB)
         {
             continue;
         }
 
-        cells[row][col].value = -1;
+        //cells[row][col].value = -1;
+        cells2(row, col).value = -1;
         placedMines++;
         genereteNumbers(row, col);
     }
@@ -129,7 +141,8 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
                 continue;
             else if (inBoard(row + j, col + i))
             {
-                nbrs.push_back(&cells[row + j][col + i]);
+                //nbrs.push_back(&cells[row + j][col + i]);
+                nbrs.push_back(&cells2(row + j, col + i));
             }
         }
     }
@@ -139,7 +152,8 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
 bool Board::click(int row, int col, char commend)
 {
     char upCommend = toupper(commend);
-    Cell &cell = cells[row][col];
+    //Cell &cell = cells[row][col];
+    Cell &cell = cells2(row, col);
 
     if (cell.IS_OPEN)
     {
@@ -167,7 +181,8 @@ bool Board::click(int row, int col, char commend)
 
 void Board::openCell(int row, int col)
 {
-    Cell &cell = cells[row][col];
+    //Cell &cell = cells[row][col];
+    Cell &cell = cells2(row, col);
 
     if (cell.IS_FLAG)
     {
