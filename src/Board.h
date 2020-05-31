@@ -22,6 +22,7 @@ private:
     std::vector<Cell *> getAllNeighbors(int row, int col);
     void openCell(int row, int col);
     void openNeighbors(int row, int col);
+    void seeEnough(int row, int col);
 
 public:
     Board(int height = SIZE, int width = SIZE, int mines = 10);

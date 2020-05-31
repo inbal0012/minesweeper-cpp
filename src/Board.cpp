@@ -178,11 +178,17 @@ bool Board::click(int row, int col, char commend)
 
     if (cell.IS_OPEN)
     {
+        seeEnough(row, col);
         return true;
     }
     switch (upCommend)
     {
     case 'O':
+        if (cell.IS_OPEN)
+        {
+            seeEnough(row, col);
+            return true;
+        }
         if (cell.IS_FLAG)
         {
             return true;
@@ -191,9 +197,18 @@ bool Board::click(int row, int col, char commend)
         return lose;
 
     case 'P':
-        cell.state = State::flag;
-        mines--;
-        return true;
+        if (cell.IS_FLAG)
+        {
+            cell.state = State::close;
+            mines++;
+            return true;
+        }
+        else
+        {
+            cell.state = State::flag;
+            mines--;
+            return true;
+        }
 
     default:
         return true;
@@ -240,6 +255,25 @@ void Board::openNeighbors(int row, int col)
                     continue;
             }
         }
+    }
+}
+
+void Board::seeEnough(int row, int col)
+{
+    auto nbrs = getAllNeighbors(row, col);
+    flags = 0;
+
+    for (auto &cell : nbrs)
+    {
+        if (cell->IS_FLAG)
+        {
+            flags++;
+        }
+    }
+
+    if (cells2(row, col).value == flags)
+    {
+        openNeighbors(row, col);
     }
 }
 
