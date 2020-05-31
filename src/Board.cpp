@@ -165,8 +165,6 @@ bool Board::settingsValidation(int row, int col, int mines)
 
 bool Board::createBoard()
 {
-    std::cout << "createBoard" << endl;
-
     /* initialize random seed: */
     srand(time(NULL));
 
@@ -190,8 +188,6 @@ bool Board::createBoard()
         placedMines++;
         genereteNumbers(row, col);
     }
-
-    std::cout << "createBoard END" << endl;
 
     return true;
 }
