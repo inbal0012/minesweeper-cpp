@@ -74,6 +74,27 @@ Board::~Board()
 {
 }
 
+//Setters
+int Board::getMines()
+{
+    return mines;
+}
+int Board::getWidth()
+{
+    return width;
+}
+int Board::getHeight()
+{
+    return height;
+}
+
+bool Board::hasLost()
+{
+    return lose;
+}
+
+//Setters END
+
 bool Board::createBoard()
 {
     std::cout << "createBoard" << endl;
@@ -197,6 +218,54 @@ void Board::openCell(int row, int col)
     }
     if (cell.IS_EMPTY)
     {
-        // TODO openNeighbors(row, col);
+        openNeighbors(row, col);
     }
+}
+
+void Board::openNeighbors(int row, int col)
+{
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (i == 0 && j == 0)
+                continue;
+            else if (inBoard(row + j, col + i))
+            {
+                if (!(cells2(row + j, col + i).IS_OPEN))
+                {
+                    openCell(row + j, col + i);
+                }
+                else
+                    continue;
+            }
+        }
+    }
+}
+
+//Validation
+bool Board::inputValidation(char commend, int row, int col)
+{
+    bool valid = false;
+    bool comValid = false;
+    char upCom = toupper(commend);
+    if (upCom == 'O' || upCom == 'P')
+    {
+        comValid = true;
+    }
+    else
+    {
+        cout << "invalid commend. please select o to open OR p to flag" << endl;
+    }
+    if (inBoard(row - 1, col - 1))
+    {
+        valid = true;
+    }
+    else
+    {
+        cout << "invalid point.   please select a point on the board" << endl;
+    }
+
+    bool res = valid && comValid;
+    return res;
 }

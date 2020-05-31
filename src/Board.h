@@ -21,10 +21,19 @@ private:
     void genereteNumbers(int row, int col);
     std::vector<Cell *> getAllNeighbors(int row, int col);
     void openCell(int row, int col);
+    void openNeighbors(int row, int col);
 
 public:
     Board(int height = SIZE, int width = SIZE, int mines = 10);
     ~Board();
+    //Getters
+    int getMines();
+    int getWidth();
+    int getHeight();
+    bool hasLost();
+
+    //game
     void PrintBoard(bool showAll = false);
     bool click(int row, int col, char commend);
+    bool inputValidation(char commend, int row, int col);
 };
