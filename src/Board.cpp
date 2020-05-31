@@ -5,7 +5,7 @@
 #include <time.h>   /* time */
 
 using namespace std;
-#define cells2(row, col) (cells2[make_pair(row, col)])
+#define cells(row, col) (cells[make_pair(row, col)])
 #define SIZE_CHECK(n) (n >= 5 && n <= 50)
 #define CHECK_MINES(mines) (mines > 0 && mines <= 500)
 
@@ -55,6 +55,7 @@ void Board::PrintBoard(bool showAll)
         std::cout << (i + 1) % 10 << " ";
         for (int j = 0; j < width; ++j)
         {
+            Cell &cell = cells(i, j);
             char v = CLOSE_CELL_CHAR;
             if (cell.state == State::open || showAll)
                 v = char(cell.value < 0 ? BOMB_CELL_CHAR : cell.IS_EMPTY ? EMPTY_CELL_CHAR : cell.value + '0'); //nested lamda. if bomb - x, if empty -> ' ', else show num
@@ -84,7 +85,7 @@ Board::Board(int height, int width, int mines)
         for (int j = 0; j < width; j++)
         {
             Cell cell;
-            cells2.insert(make_pair(make_pair(i, j), cell));
+            cells.insert(make_pair(make_pair(i, j), cell));
         }
     }
 
@@ -180,12 +181,12 @@ bool Board::createBoard()
         {
             continue;
         }
-        if (cells2(row, col).IS_BOMB)
+        if (cells(row, col).IS_BOMB)
         {
             continue;
         }
 
-        cells2(row, col).value = -1;
+        cells(row, col).value = -1;
         placedMines++;
         genereteNumbers(row, col);
     }
@@ -228,7 +229,7 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
                 continue;
             else if (inBoard(row + j, col + i))
             {
-                nbrs.push_back(&cells2(row + j, col + i));
+                nbrs.push_back(&cells(row + j, col + i));
             }
         }
     }
@@ -238,7 +239,7 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
 bool Board::click(int row, int col, char commend)
 {
     char upCommend = toupper(commend);
-    Cell &cell = cells2(row, col);
+    Cell &cell = cells(row, col);
 
     if (cell.IS_OPEN)
     {
@@ -284,7 +285,7 @@ bool Board::click(int row, int col, char commend)
 
 void Board::openCell(int row, int col)
 {
-    Cell &cell = cells2(row, col);
+    Cell &cell = cells(row, col);
 
     if (cell.IS_FLAG)
     {
@@ -314,7 +315,7 @@ void Board::openNeighbors(int row, int col)
                 continue;
             else if (inBoard(row + j, col + i))
             {
-                if (!(cells2(row + j, col + i).IS_OPEN))
+                if (!(cells(row + j, col + i).IS_OPEN))
                 {
                     openCell(row + j, col + i);
                 }
@@ -338,7 +339,7 @@ void Board::seeEnough(int row, int col)
         }
     }
 
-    if (cells2(row, col).value == flags)
+    if (cells(row, col).value == flags)
     {
         openNeighbors(row, col);
     }
@@ -354,7 +355,7 @@ bool Board::checkWin()
 
 void Board::checkBoard()
 {
-    for (const auto &entry : cells2)
+    for (const auto &entry : cells)
     {
         auto key_pair = entry.first;
         Cell cell = entry.second;
