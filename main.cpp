@@ -22,9 +22,26 @@ bool play(Board &b)
 
     return !b.hasLost();
 }
+
+Board settings()
+{
+    int row = -1, col = -1, mines = -1;
+    bool boardCreated = false;
+    do
+    {
+        cout << "\nhello and welcome\n"
+             << "please select board size (height first then width)\n"
+             << endl;
+        cin >> row >> col >> mines;
+        boardCreated = Board::settingsValidation(row, col, mines);
+    } while (!boardCreated);
+
+    return Board(row, col, mines);
+}
+
 int main()
 {
-    Board b(8, 8, 10);
+    Board b = settings();
     do
     {
         SPACE(10);

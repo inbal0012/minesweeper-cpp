@@ -6,6 +6,9 @@
 
 using namespace std;
 #define cells2(row, col) (cells2[make_pair(row, col)])
+#define SIZE_CHECK(n) (n >= 5 && n <= 50)
+#define CHECK_MINES(mines) (mines > 0 && mines <= 500)
+#define BOARD_SIZE_RECOMMENDATIONS "\nOur recommendations:\nBegginers: 8 8 10\nInter: 16 16 40\nExpert: 16 30 99\nInsain: 50 50 500\n"
 
 //prints
 void Board::printHorizontalLine()
@@ -302,4 +305,30 @@ bool Board::inputValidation(char commend, int row, int col)
 
     bool res = valid && comValid;
     return res;
+}
+
+bool Board::settingsValidation(int row, int col, int mines)
+{
+    if (!SIZE_CHECK(row) || !SIZE_CHECK(col))
+    {
+        cout << "\nSORRY\n"
+             << row << "," << col << " is an incompatible size\n please choose size between 5 - 50 " << BOARD_SIZE_RECOMMENDATIONS << endl;
+        return false;
+    }
+    if (CHECK_MINES(mines))
+    {
+        if (mines > row * col / 2)
+        {
+            cout << "\nSORRY\n"
+                 << "please create a bigger board or place less mines" << BOARD_SIZE_RECOMMENDATIONS << endl;
+            return false;
+        }
+    }
+    else
+    {
+        cout << "\nSORRY\n"
+             << mines << " is an incompatible mines amount\n please choose size between 1 - 500 (not more then half the cells)" << endl;
+        return false;
+    }
+    return true;
 }

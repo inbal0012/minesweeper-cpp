@@ -37,4 +37,5 @@ public:
     void PrintBoard(bool showAll = false);
     bool click(int row, int col, char commend);
     bool inputValidation(char commend, int row, int col);
+    static bool settingsValidation(int row, int col, int mines);
 };
