@@ -32,7 +32,11 @@ void Board::PrintBoard(bool showAll)
         for (int j = 0; j < width; ++j)
         {
             Cell &cell = cells[i][j];
-            char v = char(cell.value < 0 ? 'X' : cell.IS_EMPTY ? ' ' : cell.value + '0'); //nested lamda. if bomb - x, if empty -> ' ', else show num
+            char v = '#';
+            if (cell.state == State::open || showAll)
+                v = char(cell.value < 0 ? 'X' : cell.IS_EMPTY ? ' ' : cell.value + '0'); //nested lamda. if bomb - x, if empty -> ' ', else show num
+            else if (cell.state == State::flag)
+                v = 'P';
 
             std::cout << "| " << char(v) << " ";
         }

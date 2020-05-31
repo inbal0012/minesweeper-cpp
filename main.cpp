@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     Board b(8, 8, 10);
-    b.PrintBoard();
     b.click(2, 2, 'O');
+    b.PrintBoard();
     return 0;
 }
