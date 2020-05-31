@@ -52,6 +52,11 @@ void Board::PrintBoard(bool showAll)
 
 Board::Board(int height, int width, int mines)
 {
+    if (!settingsValidation(height, width, mines))
+    {
+        return;
+    }
+
     this->height = height;
     this->width = width;
     this->mines = mines;
@@ -91,12 +96,59 @@ int Board::getHeight()
     return height;
 }
 
-bool Board::hasLost()
-{
-    return lose;
-}
-
 //Setters END
+
+//Validation
+bool Board::inputValidation(char commend, int row, int col)
+{
+    bool valid = false;
+    bool comValid = false;
+    char upCom = toupper(commend);
+    if (upCom == 'O' || upCom == 'P')
+    {
+        comValid = true;
+    }
+    else
+    {
+        cout << "invalid commend. please select o to open OR p to flag" << endl;
+    }
+    if (inBoard(row - 1, col - 1))
+    {
+        valid = true;
+    }
+    else
+    {
+        cout << "invalid point.   please select a point on the board" << endl;
+    }
+
+    bool res = valid && comValid;
+    return res;
+}
+bool Board::settingsValidation(int row, int col, int mines)
+{
+    if (!SIZE_CHECK(row) || !SIZE_CHECK(col))
+    {
+        cout << "\nSORRY\n"
+             << row << "," << col << " is an incompatible size\n please choose size between 5 - 50 " << BOARD_SIZE_RECOMMENDATIONS << endl;
+        return false;
+    }
+    if (CHECK_MINES(mines))
+    {
+        if (mines > row * col / 2)
+        {
+            cout << "\nSORRY\n"
+                 << "please create a bigger board or place less mines" << BOARD_SIZE_RECOMMENDATIONS << endl;
+            return false;
+        }
+    }
+    else
+    {
+        cout << "\nSORRY\n"
+             << mines << " is an incompatible mines amount\n please choose size between 1 - 500 (not more then half the cells)" << endl;
+        return false;
+    }
+    return true;
+}
 
 bool Board::createBoard()
 {
@@ -182,6 +234,7 @@ bool Board::click(int row, int col, char commend)
     if (cell.IS_OPEN)
     {
         seeEnough(row, col);
+        checkWin();
         return true;
     }
     switch (upCommend)
@@ -190,6 +243,7 @@ bool Board::click(int row, int col, char commend)
         if (cell.IS_OPEN)
         {
             seeEnough(row, col);
+            checkWin();
             return true;
         }
         if (cell.IS_FLAG)
@@ -210,6 +264,7 @@ bool Board::click(int row, int col, char commend)
         {
             cell.state = State::flag;
             mines--;
+            checkWin();
             return true;
         }
 
@@ -234,6 +289,7 @@ void Board::openCell(int row, int col)
         lose = true;
         return;
     }
+    seeEnough(row, col);
     if (cell.IS_EMPTY)
     {
         openNeighbors(row, col);
@@ -280,55 +336,34 @@ void Board::seeEnough(int row, int col)
     }
 }
 
-//Validation
-bool Board::inputValidation(char commend, int row, int col)
+bool Board::checkWin()
 {
-    bool valid = false;
-    bool comValid = false;
-    char upCom = toupper(commend);
-    if (upCom == 'O' || upCom == 'P')
+    if (mines == 0)
     {
-        comValid = true;
+        checkBoard();
     }
-    else
-    {
-        cout << "invalid commend. please select o to open OR p to flag" << endl;
-    }
-    if (inBoard(row - 1, col - 1))
-    {
-        valid = true;
-    }
-    else
-    {
-        cout << "invalid point.   please select a point on the board" << endl;
-    }
-
-    bool res = valid && comValid;
-    return res;
 }
 
-bool Board::settingsValidation(int row, int col, int mines)
+void Board::checkBoard()
 {
-    if (!SIZE_CHECK(row) || !SIZE_CHECK(col))
+    for (const auto &entry : cells2)
     {
-        cout << "\nSORRY\n"
-             << row << "," << col << " is an incompatible size\n please choose size between 5 - 50 " << BOARD_SIZE_RECOMMENDATIONS << endl;
-        return false;
-    }
-    if (CHECK_MINES(mines))
-    {
-        if (mines > row * col / 2)
+        auto key_pair = entry.first;
+        Cell cell = entry.second;
+        if (cell.state == State::close)
         {
-            cout << "\nSORRY\n"
-                 << "please create a bigger board or place less mines" << BOARD_SIZE_RECOMMENDATIONS << endl;
-            return false;
+            openCell(key_pair.first, key_pair.second);
         }
     }
-    else
+
+    if (!lose)
     {
-        cout << "\nSORRY\n"
-             << mines << " is an incompatible mines amount\n please choose size between 1 - 500 (not more then half the cells)" << endl;
-        return false;
+        win = true;
+        cout << "\n\ncongratulations! you've WON!!!" << endl;
     }
-    return true;
+}
+
+bool Board::isGameOver()
+{
+    return !(lose || win);
 }

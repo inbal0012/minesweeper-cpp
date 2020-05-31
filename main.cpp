@@ -20,7 +20,7 @@ bool play(Board &b)
 
     b.click(row - 1, col - 1, commend); //user will NOT work starting with 0
 
-    return !b.hasLost();
+    return b.isGameOver();
 }
 
 Board settings()
