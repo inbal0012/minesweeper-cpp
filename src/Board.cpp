@@ -6,8 +6,6 @@
 
 using namespace std;
 #define cells(row, col) (cells[make_pair(row, col)])
-#define SIZE_CHECK(n) (n >= 5 && n <= 50)
-#define CHECK_MINES(mines) (mines > 0 && mines <= 500)
 
 //strings
 //print
@@ -25,7 +23,7 @@ using namespace std;
 #define SIZE_ERROR " is an incompatible size\n please choose size between 5 - 50 "
 #define MINES_RATIO_ERROR "please create a bigger board or place less mines"
 #define MINES_COUNT_ERROR " is an incompatible mines amount\n please choose size between 1 - 500 (not more then half the cells)"
-#define BOARD_SIZE_RECOMMENDATIONS "\nOur recommendations:\nBegginers: 8 8 10\nInter: 16 16 40\nExpert: 16 30 99\nInsain: 50 50 500\n"
+#define BOARD_SIZE_RECOMMENDATIONS "\nOur recommendations:\nBegginers: 8 8 10\nInter: 16 16 40\nExpert: 16 30 99\nInsane: 50 50 500\n"
 
 #define WON_STRING "\n\ncongratulations! you've WON!!!"
 #define LOSE_STRING "Loooooseerrrrrr"
@@ -139,6 +137,9 @@ bool Board::inputValidation(char commend, int row, int col)
 }
 bool Board::settingsValidation(int row, int col, int mines)
 {
+    auto SIZE_CHECK = [](int n) -> bool { return n >= 5 && n <= 50; };
+    auto CHECK_MINES = [](int mines) -> bool { return mines > 0 && mines <= 500; };
+
     if (!SIZE_CHECK(row) || !SIZE_CHECK(col))
     {
         cout << SORRY
