@@ -5,10 +5,28 @@
 #include <time.h>   /* time */
 
 using namespace std;
-#define cells2(row, col) (cells2[make_pair(row, col)])
-#define SIZE_CHECK(n) (n >= 5 && n <= 50)
-#define CHECK_MINES(mines) (mines > 0 && mines <= 500)
-#define BOARD_SIZE_RECOMMENDATIONS "\nOur recommendations:\nBegginers: 8 8 10\nInter: 16 16 40\nExpert: 16 30 99\nInsain: 50 50 500\n"
+#define cells(row, col) (cells[make_pair(row, col)])
+
+//strings
+//print
+#define CLOSE_CELL_CHAR '#'
+#define BOMB_CELL_CHAR 'X'
+#define FLAG_CELL_CHAR 'p'
+#define EMPTY_CELL_CHAR ' '
+
+//input validation
+#define INVALID_COMMEND "invalid commend. please select o to open OR p to flag"
+#define INVALID_POINT "invalid point.   please select a point on the board"
+
+//settings validation
+#define SORRY "\nSORRY\n"
+#define SIZE_ERROR " is an incompatible size\n please choose size between 5 - 50 "
+#define MINES_RATIO_ERROR "please create a bigger board or place less mines"
+#define MINES_COUNT_ERROR " is an incompatible mines amount\n please choose size between 1 - 500 (not more then half the cells)"
+#define BOARD_SIZE_RECOMMENDATIONS "\nOur recommendations:\nBegginers: 8 8 10\nInter: 16 16 40\nExpert: 16 30 99\nInsane: 50 50 500\n"
+
+#define WON_STRING "\n\ncongratulations! you've WON!!!"
+#define LOSE_STRING "Loooooseerrrrrr"
 
 //prints
 void Board::printHorizontalLine()
@@ -35,12 +53,12 @@ void Board::PrintBoard(bool showAll)
         std::cout << (i + 1) % 10 << " ";
         for (int j = 0; j < width; ++j)
         {
-            Cell &cell = cells2(i, j);
-            char v = '#';
+            Cell &cell = cells(i, j);
+            char v = CLOSE_CELL_CHAR;
             if (cell.state == State::open || showAll)
-                v = char(cell.value < 0 ? 'X' : cell.IS_EMPTY ? ' ' : cell.value + '0'); //nested lamda. if bomb - x, if empty -> ' ', else show num
+                v = char(cell.value < 0 ? BOMB_CELL_CHAR : cell.IS_EMPTY ? EMPTY_CELL_CHAR : cell.value + '0'); //nested lamda. if bomb - x, if empty -> ' ', else show num
             else if (cell.state == State::flag)
-                v = 'P';
+                v = FLAG_CELL_CHAR;
 
             std::cout << "| " << char(v) << " ";
         }
@@ -65,7 +83,7 @@ Board::Board(int height, int width, int mines)
         for (int j = 0; j < width; j++)
         {
             Cell cell;
-            cells2.insert(make_pair(make_pair(i, j), cell));
+            cells.insert(make_pair(make_pair(i, j), cell));
         }
     }
 
@@ -103,7 +121,7 @@ bool Board::inputValidation(char commend, int row, int col)
     }
     else
     {
-        cout << "invalid commend. please select o to open OR p to flag" << endl;
+        cout << INVALID_COMMEND << endl;
     }
     if (inBoard(row - 1, col - 1))
     {
@@ -111,7 +129,7 @@ bool Board::inputValidation(char commend, int row, int col)
     }
     else
     {
-        cout << "invalid point.   please select a point on the board" << endl;
+        cout << INVALID_POINT << endl;
     }
 
     bool res = valid && comValid;
@@ -119,25 +137,28 @@ bool Board::inputValidation(char commend, int row, int col)
 }
 bool Board::settingsValidation(int row, int col, int mines)
 {
+    auto SIZE_CHECK = [](int n) -> bool { return n >= 5 && n <= 50; };
+    auto CHECK_MINES = [](int mines) -> bool { return mines > 0 && mines <= 500; };
+
     if (!SIZE_CHECK(row) || !SIZE_CHECK(col))
     {
-        cout << "\nSORRY\n"
-             << row << "," << col << " is an incompatible size\n please choose size between 5 - 50 " << BOARD_SIZE_RECOMMENDATIONS << endl;
+        cout << SORRY
+             << row << "," << col << SIZE_ERROR << BOARD_SIZE_RECOMMENDATIONS << endl;
         return false;
     }
     if (CHECK_MINES(mines))
     {
         if (mines > row * col / 2)
         {
-            cout << "\nSORRY\n"
-                 << "please create a bigger board or place less mines" << BOARD_SIZE_RECOMMENDATIONS << endl;
+            cout << SORRY
+                 << MINES_RATIO_ERROR << BOARD_SIZE_RECOMMENDATIONS << endl;
             return false;
         }
     }
     else
     {
-        cout << "\nSORRY\n"
-             << mines << " is an incompatible mines amount\n please choose size between 1 - 500 (not more then half the cells)" << endl;
+        cout << SORRY
+             << mines << MINES_COUNT_ERROR << BOARD_SIZE_RECOMMENDATIONS << endl;
         return false;
     }
     return true;
@@ -145,8 +166,6 @@ bool Board::settingsValidation(int row, int col, int mines)
 
 bool Board::createBoard()
 {
-    std::cout << "createBoard" << endl;
-
     /* initialize random seed: */
     srand(time(NULL));
 
@@ -161,17 +180,15 @@ bool Board::createBoard()
         {
             continue;
         }
-        if (cells2(row, col).IS_BOMB)
+        if (cells(row, col).IS_BOMB)
         {
             continue;
         }
 
-        cells2(row, col).value = -1;
+        cells(row, col).value = -1;
         placedMines++;
         genereteNumbers(row, col);
     }
-
-    std::cout << "createBoard END" << endl;
 
     return true;
 }
@@ -209,7 +226,7 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
                 continue;
             else if (inBoard(row + j, col + i))
             {
-                nbrs.push_back(&cells2(row + j, col + i));
+                nbrs.push_back(&cells(row + j, col + i));
             }
         }
     }
@@ -219,7 +236,7 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
 bool Board::click(int row, int col, char commend)
 {
     char upCommend = toupper(commend);
-    Cell &cell = cells2(row, col);
+    Cell &cell = cells(row, col);
 
     if (cell.IS_OPEN)
     {
@@ -265,7 +282,7 @@ bool Board::click(int row, int col, char commend)
 
 void Board::openCell(int row, int col)
 {
-    Cell &cell = cells2(row, col);
+    Cell &cell = cells(row, col);
 
     if (cell.IS_FLAG)
     {
@@ -274,7 +291,7 @@ void Board::openCell(int row, int col)
     cell.state = State::open;
     if (cell.IS_BOMB)
     {
-        std::cout << "Loooooseerrrrrr" << endl;
+        std::cout << LOSE_STRING << endl;
         lose = true;
         return;
     }
@@ -295,7 +312,7 @@ void Board::openNeighbors(int row, int col)
                 continue;
             else if (inBoard(row + j, col + i))
             {
-                if (!(cells2(row + j, col + i).IS_OPEN))
+                if (!(cells(row + j, col + i).IS_OPEN))
                 {
                     openCell(row + j, col + i);
                 }
@@ -319,7 +336,7 @@ void Board::seeEnough(int row, int col)
         }
     }
 
-    if (cells2(row, col).value == flags)
+    if (cells(row, col).value == flags)
     {
         openNeighbors(row, col);
     }
@@ -335,7 +352,7 @@ bool Board::checkWin()
 
 void Board::checkBoard()
 {
-    for (const auto &entry : cells2)
+    for (const auto &entry : cells)
     {
         auto key_pair = entry.first;
         Cell cell = entry.second;
@@ -348,7 +365,7 @@ void Board::checkBoard()
     if (!lose)
     {
         win = true;
-        cout << "\n\ncongratulations! you've WON!!!" << endl;
+        cout << WON_STRING << endl;
     }
 }
 

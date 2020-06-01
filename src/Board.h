@@ -11,7 +11,7 @@ class Board
 {
 private:
     int height, width, mines, flags = 0;
-    std::map<point, Cell> cells2;
+    std::map<point, Cell> cells;
     bool lose = false, win = false;
 
     void printHorizontalLine();
