@@ -14,7 +14,7 @@ bool play(Board &b)
     do
     {
         cout << "You have " << b.getMines() << " mines left\n"
-             << "Enter ROW and COL and command (Example: \"O 1 5\" OR \"P 6 3\"): ";
+             << "Enter commend and ROW and COL (Example: \"O 1 5\" OR \"P 6 3\"): ";
         cin >> commend >> row >> col;
     } while (!b.inputValidation(commend, row, col));
 
@@ -34,6 +34,15 @@ Board settings()
              << endl;
         cin >> row >> col >> mines;
         boardCreated = Board::settingsValidation(row, col, mines);
+        // if (boardCreated) {
+        //     char ass;
+        //     cout << "do you want to able the assistant mode? Y/N";
+        //     cin >> ass;
+        //     toupper(ass);
+        //     if (ass=='Y' || ass == 'N') {
+
+        //     }
+        // }
     } while (!boardCreated);
 
     return Board(row, col, mines);
@@ -44,14 +53,22 @@ int main()
     /*todo: 
     Ass mood - cB(r, c) -> if cell != empty then try again (spinner?)
     If clsNbrs+flags == value then flagNbrs.
+
+    strategy -> code duplications
+    factory -> getNewBoard 
+    files -> score board
+    timer -> threads?
+    last action -> color?
+    symble index + game instructions
      */
 
     Board b = settings();
+    b.PrintBoard(true);
     do
     {
         SPACE(10);
         b.PrintBoard();
     } while (play(b));
-    b.PrintBoard();
+    b.PrintBoard(true);
     return 0;
 }
