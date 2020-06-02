@@ -4,15 +4,14 @@
 #include <stdlib.h> /* srand, rand */
 #include <time.h>   /* time */
 
-using namespace std;
 #define cells(row, col) (cells[make_pair(row, col)])
 
 //strings
 //print
-#define CLOSE_CELL_CHAR '#'
+#define CLOSE_CELL_CHAR ' '
 #define BOMB_CELL_CHAR 'X'
-#define FLAG_CELL_CHAR 'p'
-#define EMPTY_CELL_CHAR ' '
+#define FLAG_CELL_CHAR 'P'
+#define EMPTY_CELL_CHAR '~'
 
 //input validation
 #define INVALID_COMMEND "invalid commend. please select o to open OR p to flag"
@@ -106,7 +105,6 @@ int Board::getHeight()
 {
     return height;
 }
-
 //Setters END
 
 //Validation
@@ -371,5 +369,5 @@ void Board::checkBoard()
 
 bool Board::isGameOver()
 {
-    return !(lose || win);
+    return (lose || win);
 }

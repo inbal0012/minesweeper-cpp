@@ -2,6 +2,8 @@
 #include <vector>
 #include <map>
 
+using namespace std;
+
 #define SIZE 8
 
 typedef std::pair<int, int> point;
