@@ -41,7 +41,8 @@
         "array": "cpp",
         "iterator": "cpp",
         "map": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "string_view": "cpp"
     },
     "cSpell.words": [
         "nbrs"

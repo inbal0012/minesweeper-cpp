@@ -7,6 +7,31 @@ using namespace std;
     for (int i = 0; i < 10; i++) \
     cout << endl
 
+Board settings()
+{
+    int row = -1, col = -1, mines = -1;
+    bool boardCreated = false;
+    do
+    {
+        cout << "\nhello and welcome\n"
+             << "please select board size (height first then width)\n"
+             << endl;
+        cin >> row >> col >> mines;
+        boardCreated = Board::settingsValidation(row, col, mines);
+        // if (boardCreated) {
+        //     char ass;
+        //     cout << "do you want to able the assistant mode? Y/N";
+        //     cin >> ass;
+        //     toupper(ass);
+        //     if (ass=='Y' || ass == 'N') {
+
+        //     }
+        // }
+    } while (!boardCreated);
+
+    return Board(row, col, mines);
+}
+
 bool clickHandler(Board &b)
 {
     int row = -1, col = -1;
@@ -33,31 +58,6 @@ void play()
         b.PrintBoard();
     } while (clickHandler(b));
     b.PrintBoard(true);
-}
-
-Board settings()
-{
-    int row = -1, col = -1, mines = -1;
-    bool boardCreated = false;
-    do
-    {
-        cout << "\nhello and welcome\n"
-             << "please select board size (height first then width)\n"
-             << endl;
-        cin >> row >> col >> mines;
-        boardCreated = Board::settingsValidation(row, col, mines);
-        // if (boardCreated) {
-        //     char ass;
-        //     cout << "do you want to able the assistant mode? Y/N";
-        //     cin >> ass;
-        //     toupper(ass);
-        //     if (ass=='Y' || ass == 'N') {
-
-        //     }
-        // }
-    } while (!boardCreated);
-
-    return Board(row, col, mines);
 }
 
 int main()

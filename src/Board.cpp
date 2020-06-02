@@ -204,8 +204,9 @@ bool Board::inBoard(int row, int col)
 void Board::genereteNumbers(int row, int col)
 {
     auto nbrs = getAllNeighbors(row, col);
-    for (auto &cell : nbrs)
+    for (auto &entry : nbrs)
     {
+        auto cell = entry.second;
         if (cell->IS_BOMB)
             continue;
 
@@ -213,9 +214,9 @@ void Board::genereteNumbers(int row, int col)
     }
 }
 
-vector<Cell *> Board::getAllNeighbors(int row, int col)
+std::vector<pair<point, Cell *>> Board::getAllNeighbors(int row, int col)
 {
-    vector<Cell *> nbrs;
+    vector<pair<point, Cell *>> nbrs;
     for (int i = -1; i <= 1; i++)
     {
         for (int j = -1; j <= 1; j++)
@@ -224,7 +225,8 @@ vector<Cell *> Board::getAllNeighbors(int row, int col)
                 continue;
             else if (inBoard(row + j, col + i))
             {
-                nbrs.push_back(&cells(row + j, col + i));
+                point p = make_pair(row + j, col + i);
+                nbrs.push_back(make_pair(p, &cells(row + j, col + i)));
             }
         }
     }
@@ -236,12 +238,6 @@ bool Board::click(int row, int col, char commend)
     char upCommend = toupper(commend);
     Cell &cell = cells(row, col);
 
-    if (cell.IS_OPEN)
-    {
-        seeEnough(row, col);
-        checkWin();
-        return true;
-    }
     switch (upCommend)
     {
     case 'O':
@@ -265,10 +261,15 @@ bool Board::click(int row, int col, char commend)
             mines++;
             return true;
         }
+        else if (cell.IS_OPEN)
+        {
+            checkAmbiguity(row, col);
+            checkWin();
+            return true;
+        }
         else
         {
-            cell.state = State::flag;
-            mines--;
+            flagCell(&cell);
             checkWin();
             return true;
         }
@@ -302,21 +303,34 @@ void Board::openCell(int row, int col)
 
 void Board::openNeighbors(int row, int col)
 {
-    for (int i = -1; i <= 1; i++)
+    // for (int i = -1; i <= 1; i++)
+    // {
+    //     for (int j = -1; j <= 1; j++)
+    //     {
+    //         if (i == 0 && j == 0)
+    //             continue;
+    //         else if (inBoard(row + j, col + i))
+    //         {
+    //             if (!(cells(row + j, col + i).IS_OPEN))
+    //             {
+    //                 openCell(row + j, col + i);
+    //             }
+    //             else
+    //                 continue;
+    //         }
+    //     }
+    // }
+
+    auto nbrs = getAllNeighbors(row, col);
+    for (auto &entry : nbrs)
     {
-        for (int j = -1; j <= 1; j++)
+        auto nbr = entry.second;
+        if (!(nbr->IS_OPEN))
         {
-            if (i == 0 && j == 0)
-                continue;
-            else if (inBoard(row + j, col + i))
-            {
-                if (!(cells(row + j, col + i).IS_OPEN))
-                {
-                    openCell(row + j, col + i);
-                }
-                else
-                    continue;
-            }
+            int row = entry.first.first;
+            int col = entry.first.second;
+            openCell(row, col);
+            //nbr->state = State::flag;
         }
     }
 }
@@ -324,10 +338,11 @@ void Board::openNeighbors(int row, int col)
 void Board::seeEnough(int row, int col)
 {
     auto nbrs = getAllNeighbors(row, col);
-    flags = 0;
+    int flags = 0;
 
-    for (auto &cell : nbrs)
+    for (auto &entry : nbrs)
     {
+        auto cell = entry.second;
         if (cell->IS_FLAG)
         {
             flags++;
@@ -338,6 +353,53 @@ void Board::seeEnough(int row, int col)
     {
         openNeighbors(row, col);
     }
+}
+
+bool Board::checkAmbiguity(int row, int col)
+{
+    auto nbrs = getAllNeighbors(row, col);
+    int flags = 0, close = 0;
+
+    for (auto &entry : nbrs)
+    {
+        auto cell = entry.second;
+        if (cell->IS_FLAG)
+        {
+            flags++;
+        }
+        if (cell->state == State::close)
+        {
+            close++;
+        }
+    }
+
+    if (cells(row, col).value == flags)
+    {
+        openNeighbors(row, col);
+    }
+    else if (cells(row, col).value == flags + close)
+    {
+        flagNeighbors(row, col);
+    }
+}
+
+void Board::flagNeighbors(int row, int col)
+{
+    auto nbrs = getAllNeighbors(row, col);
+    for (auto &entry : nbrs)
+    {
+        auto nbr = entry.second;
+        if (!(nbr->IS_OPEN))
+        {
+            flagCell(nbr);
+        }
+    }
+}
+
+void Board::flagCell(Cell *cell)
+{
+    cell->state = State::flag;
+    mines--;
 }
 
 bool Board::checkWin()
