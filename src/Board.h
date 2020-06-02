@@ -20,9 +20,12 @@ private:
     bool createBoard();
     bool inBoard(int row, int col);
     void genereteNumbers(int row, int col);
-    std::vector<Cell *> getAllNeighbors(int row, int col);
+    std::vector<pair<point, Cell *>> getAllNeighbors(int row, int col);
     void openCell(int row, int col);
+    void flagCell(Cell *cell);
     void openNeighbors(int row, int col);
+    void flagNeighbors(int row, int col);
+    bool checkAmbiguity(int row, int col);
     void seeEnough(int row, int col);
     bool checkWin();
     void checkBoard();
