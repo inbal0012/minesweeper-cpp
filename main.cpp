@@ -7,7 +7,7 @@ using namespace std;
     for (int i = 0; i < 10; i++) \
     cout << endl
 
-bool play(Board &b)
+bool clickHandler(Board &b)
 {
     int row = -1, col = -1;
     char commend = 'O';
@@ -21,6 +21,18 @@ bool play(Board &b)
     b.click(row - 1, col - 1, commend); //user will NOT work starting with 0
 
     return !b.isGameOver();
+}
+
+void play()
+{
+    Board b = settings();
+    b.PrintBoard(true);
+    do
+    {
+        SPACE(10);
+        b.PrintBoard();
+    } while (clickHandler(b));
+    b.PrintBoard(true);
 }
 
 Board settings()
@@ -61,14 +73,7 @@ int main()
     last action -> color?
     symble index + game instructions
      */
+    play();
 
-    Board b = settings();
-    b.PrintBoard(true);
-    do
-    {
-        SPACE(10);
-        b.PrintBoard();
-    } while (play(b));
-    b.PrintBoard(true);
     return 0;
 }
