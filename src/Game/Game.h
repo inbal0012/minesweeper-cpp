@@ -3,6 +3,7 @@
 #define _Game
 
 #include <iostream>
+#include <time.h> /* time_t, struct tm, difftime, time, mktime */
 #include "../Board/Board.cpp"
 #include "../Strings.cpp"
 
@@ -15,11 +16,13 @@ class Game
 private:
     /* data */
     Board *b;
+    time_t startTime = 0;
 
     //prints
     void printHorizontalLine();
     void PrintBoard(bool showAll = false);
     void printSymbleIndexAndGameInstructions();
+    void printTime();
 
     //Validation
     bool inputValidation(char commend, int row, int col);

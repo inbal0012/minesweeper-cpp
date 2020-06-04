@@ -10,7 +10,9 @@ Game::~Game()
 void Game::Play()
 {
     settings();
-    PrintBoard(true);
+    PrintBoard();
+    clickHandler();
+    startTime = time(NULL);
     do
     {
         SPACE(10);
@@ -55,6 +57,16 @@ void Game::PrintBoard(bool showAll)
         }
         std::cout << "|" << endl;
         printHorizontalLine();
+    }
+}
+void Game::printTime()
+{
+    if (startTime != 0)
+    {
+        int t = time(NULL) - startTime;
+        int min = t / 60;
+        int sec = t % 60;
+        cout << min << ":" << sec << endl;
     }
 }
 void Game::printSymbleIndexAndGameInstructions()
@@ -155,8 +167,10 @@ bool Game::clickHandler()
     char commend = 'O';
     do
     {
-        cout << "You have " << b->getMines() << " mines left\n"
-             << "Enter commend and ROW and COL (Example: \"O 1 5\" OR \"P 6 3\"): ";
+        printTime();
+        cout
+            << "You have " << b->getMines() << " mines left\n"
+            << "Enter commend and ROW and COL (Example: \"O 1 5\" OR \"P 6 3\"): ";
         cin >> commend >> row >> col;
     } while (!inputValidation(commend, row, col));
 
