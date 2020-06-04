@@ -5,6 +5,7 @@
 #include <iostream>
 #include <time.h> /* time_t, struct tm, difftime, time, mktime */
 #include "../Board/Board.cpp"
+#include "../Scoreboard/Scoreboard.cpp"
 #include "../Strings.cpp"
 
 #define SPACE(n)                 \
@@ -39,6 +40,7 @@ public:
     Game(/* args */);
     ~Game();
     void Play();
+    void checkScoreboard();
 };
 
 #endif // _Game

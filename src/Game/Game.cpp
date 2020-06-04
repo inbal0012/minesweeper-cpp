@@ -10,7 +10,7 @@ Game::~Game()
 void Game::Play()
 {
     settings();
-    PrintBoard();
+    PrintBoard(true);
     clickHandler();
     startTime = time(NULL);
     do
@@ -63,10 +63,7 @@ void Game::printTime()
 {
     if (startTime != 0)
     {
-        int t = time(NULL) - startTime;
-        int min = t / 60;
-        int sec = t % 60;
-        cout << min << ":" << sec << endl;
+        cout << parseTime(time(NULL) - startTime) << endl;
     }
 }
 void Game::printSymbleIndexAndGameInstructions()
@@ -169,7 +166,7 @@ bool Game::clickHandler()
     {
         printTime();
         cout
-            << "You have " << b->getMines() << " mines left\n"
+            << "You have " << b->getMines() - b->getFlags() << " mines left\n"
             << "Enter commend and ROW and COL (Example: \"O 1 5\" OR \"P 6 3\"): ";
         cin >> commend >> row >> col;
     } while (!inputValidation(commend, row, col));
@@ -257,7 +254,7 @@ bool Game::checkAmbiguity(int row, int col)
 
 bool Game::checkWin()
 {
-    if (b->getMines() == 0)
+    if (b->getMines() == b->getFlags() || (b->getHeight() * b->getWidth() - b->getOpenCells()) == (b->getMines() - b->getFlags()))
     {
         b->checkBoard();
     }
@@ -273,7 +270,29 @@ bool Game::isGameOver()
     else if (b->getWin())
     {
         cout << WON_STRING << endl;
+        startTime = time(NULL) - startTime;
+        checkScoreboard();
         return true;
     }
     return false;
+}
+
+void Game::checkScoreboard()
+{
+    Scoreboard SB;
+    SB.getScoreboard();
+    if (SB.isOnScoreboard(startTime))
+    {
+        ScoreboardEntry entry;
+        entry.timeInt = startTime;
+        entry.board = to_string(b->getHeight()) + "x" + to_string(b->getWidth());
+        entry.mines = to_string(b->getMines());
+        cout << SCOREBOARD_NEW << endl
+             << GET_NAME;
+        cin >> entry.name;
+
+        SB.addToScoreboard(entry);
+        SB.saveScoreboard();
+        SB.printScoreboard();
+    }
 }

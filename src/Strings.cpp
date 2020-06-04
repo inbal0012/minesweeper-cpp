@@ -19,3 +19,6 @@
 
 #define WON_STRING "\n\ncongratulations! you've WON!!!"
 #define LOSE_STRING "Loooooseerrrrrr"
+
+#define SCOREBOARD_NEW "WOW! you're on the scoreboard! "
+#define GET_NAME "What's your name? "

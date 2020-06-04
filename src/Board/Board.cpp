@@ -78,6 +78,10 @@ int Board::getMines()
 {
     return mines;
 }
+int Board::getFlags()
+{
+    return flags;
+}
 int Board::getWidth()
 {
     return width;
@@ -85,6 +89,11 @@ int Board::getWidth()
 int Board::getHeight()
 {
     return height;
+}
+
+int Board::getOpenCells()
+{
+    return openCells;
 }
 bool Board::getLose()
 {
@@ -125,6 +134,7 @@ std::vector<pair<point, Cell *>> Board::getAllNeighbors(int row, int col)
 void Board::openCell(int row, int col)
 {
     Cell &cell = cells(row, col);
+    openCells++;
 
     if (cell.IS_FLAG)
     {
@@ -162,7 +172,7 @@ void Board::flagCell(Cell *cell)
     if (cell->IS_CLOSE)
     {
         cell->state = State::flag;
-        mines--;
+        flags++;
     }
 }
 void Board::unflagCell(Cell *cell)
@@ -170,7 +180,7 @@ void Board::unflagCell(Cell *cell)
     if (cell->IS_FLAG)
     {
         cell->state = State::close;
-        mines++;
+        flags--;
     }
 }
 void Board::flagNeighbors(int row, int col)

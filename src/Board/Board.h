@@ -20,7 +20,7 @@ typedef std::map<point, Cell> matrix;
 class Board
 {
 private:
-    int height, width, mines;
+    int height, width, mines, flags = 0, openCells = 0;
     std::map<point, Cell> cells;
     bool lose = false, win = false;
 
@@ -33,10 +33,12 @@ public:
     ~Board();
     //Getters
     int getMines();
+    int getFlags();
     int getWidth();
     int getHeight();
     bool getLose();
     bool getWin();
+    int getOpenCells();
     Cell &getCellAt(int row, int col);
     std::vector<pair<point, Cell *>> getAllNeighbors(int row, int col);
     //Change Cell/s
