@@ -187,23 +187,19 @@ bool Game::click(int row, int col, char commend)
         return b->getLose();
 
     case 'P':
-        std::cout << "P " << (int)cell.state << endl;
         if (cell.IS_FLAG)
         {
-            cout << "P " << row << "," << col << "is flag" << endl;
             b->unflagCell(&cell);
             return true;
         }
         else if (cell.IS_OPEN)
         {
-            cout << "P " << row << "," << col << " is open" << endl;
             checkAmbiguity(row, col);
             checkWin();
             return true;
         }
         else
         {
-            cout << "P flag " << row << "," << col << endl;
             b->flagCell(&cell);
             checkWin();
             return true;
