@@ -11,14 +11,15 @@ void Game::Play()
 {
     settings();
     PrintBoard(true);
+
     clickHandler();
     startTime = time(NULL);
     do
     {
         SPACE(10);
-        PrintBoard();
+        PrintColoredBoard();
     } while (clickHandler());
-    PrintBoard(true);
+    PrintColoredBoard(true);
 }
 
 //prints
@@ -59,6 +60,30 @@ void Game::PrintBoard(bool showAll)
         printHorizontalLine();
     }
 }
+
+void Game::PrintColoredBoard(bool showAll)
+{
+    std::cout << "0 ";
+    for (int i = 0; i < b->getWidth(); ++i)
+        std::cout
+            << "| " << (i + 1) % 10 << " ";
+
+    std::cout << "|"; // the right bar
+    std::cout << "\n";
+
+    printHorizontalLine();
+    for (int i = 0; i < b->getHeight(); i++)
+    {
+        std::cout << (i + 1) % 10 << " ";
+        for (int j = 0; j < b->getWidth(); ++j)
+        {
+            Cell &cell = b->getCellAt(i, j);
+            printCell(cell);
+        }
+        std::cout << "|" << endl;
+        printHorizontalLine();
+    }
+}
 void Game::printTime()
 {
     if (startTime != 0)
@@ -75,6 +100,93 @@ void Game::printSymbleIndexAndGameInstructions()
          << EMPTY_CELL_CHAR << " represent an empty cell\n"
          << endl;
     //TODO Game Instructions
+}
+void Game::printColoredCell(int cellValue)
+{
+    string color = "default";
+    switch (cellValue)
+    {
+    case 1:
+        color = "blue";
+        break;
+    case 2:
+        color = "green";
+        break;
+    case 3:
+        color = "red";
+        break;
+    case 4:
+        color = "purple";
+        break;
+    case 5:
+        color = "yellow";
+        break;
+    case 6:
+        color = "cyan";
+        break;
+    case 7:
+        color = "white";
+        break;
+    case 8:
+        color = "grey";
+        break;
+
+    default:
+        break;
+    }
+    setcolor(color);
+    cout << char(cellValue + '0');
+    setcolor("default");
+}
+void Game::printCell(Cell &cell)
+{
+    cout << "| ";
+    char v = CLOSE_CELL_CHAR;
+    if (cell.IS_CLOSE)
+    {
+        cout << CLOSE_CELL_CHAR;
+    }
+    else if (cell.IS_OPEN)
+    {
+        if (cell.value < 0)
+        {
+            cout << BOMB_CELL_CHAR;
+        }
+        else if (cell.IS_EMPTY)
+        {
+            cout << EMPTY_CELL_CHAR;
+        }
+        else
+        {
+            printColoredCell(cell.value);
+        }
+    }
+    else if (cell.IS_FLAG)
+        cout << FLAG_CELL_CHAR;
+
+    std::cout << " ";
+}
+void Game::setcolor(string C)
+{ //Source http://mypccourse.com/cosc1436/book/chapter21.html
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (C == "gray" || C == "default")
+        SetConsoleTextAttribute(h, 7);
+    else if (C == "blue") //1
+        SetConsoleTextAttribute(h, 9);
+    else if (C == "green") //2
+        SetConsoleTextAttribute(h, 10);
+    else if (C == "red") //3
+        SetConsoleTextAttribute(h, 12);
+    else if (C == "purple") //4
+        SetConsoleTextAttribute(h, 13);
+    else if (C == "yellow") //5
+        SetConsoleTextAttribute(h, 14);
+    else if (C == "cyan") //6
+        SetConsoleTextAttribute(h, 11);
+    else if (C == "white") //7
+        SetConsoleTextAttribute(h, 15);
+    else if (C == "grey") //8
+        SetConsoleTextAttribute(h, 8);
 }
 
 //Validation

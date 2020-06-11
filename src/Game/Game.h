@@ -22,6 +22,10 @@ private:
     //prints
     void printHorizontalLine();
     void PrintBoard(bool showAll = false);
+    void PrintColoredBoard(bool showAll = false);
+    void printCell(Cell &cell);
+    void printColoredCell(int cellValue);
+    void setcolor(string C);
     void printSymbleIndexAndGameInstructions();
     void printTime();
 
