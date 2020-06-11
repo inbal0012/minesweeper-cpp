@@ -8,8 +8,8 @@
 #include "../Scoreboard/Scoreboard.cpp"
 #include "../Strings.cpp"
 
-#define SPACE(n)                 \
-    for (int i = 0; i < 10; i++) \
+#define SPACE(n)                \
+    for (int i = 0; i < n; i++) \
     cout << endl
 
 class Game
@@ -23,8 +23,8 @@ private:
     void printHorizontalLine();
     void PrintBoard(bool showAll = false);
     void PrintColoredBoard(bool showAll = false);
-    void printCell(Cell &cell);
     void printColoredCell(int cellValue);
+    void printCell(Cell &cell);
     void setcolor(string C);
     void printSymbleIndexAndGameInstructions();
     void printTime();

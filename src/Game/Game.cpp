@@ -84,23 +84,6 @@ void Game::PrintColoredBoard(bool showAll)
         printHorizontalLine();
     }
 }
-void Game::printTime()
-{
-    if (startTime != 0)
-    {
-        cout << parseTime(time(NULL) - startTime) << endl;
-    }
-}
-void Game::printSymbleIndexAndGameInstructions()
-{
-    cout << "Game Symbols: \n"
-         << CLOSE_CELL_CHAR << " represent a closed cell\n"
-         << BOMB_CELL_CHAR << " represent a bomb!! be carfull \n"
-         << FLAG_CELL_CHAR << " represent a flaged cell\n"
-         << EMPTY_CELL_CHAR << " represent an empty cell\n"
-         << endl;
-    //TODO Game Instructions
-}
 void Game::printColoredCell(int cellValue)
 {
     string color = "default";
@@ -187,6 +170,24 @@ void Game::setcolor(string C)
         SetConsoleTextAttribute(h, 15);
     else if (C == "grey") //8
         SetConsoleTextAttribute(h, 8);
+}
+
+void Game::printTime()
+{
+    if (startTime != 0)
+    {
+        cout << parseTime(time(NULL) - startTime) << endl;
+    }
+}
+void Game::printSymbleIndexAndGameInstructions()
+{
+    cout << "Game Symbols: \n"
+         << CLOSE_CELL_CHAR << " represent a closed cell\n"
+         << BOMB_CELL_CHAR << " represent a bomb!! be carfull \n"
+         << FLAG_CELL_CHAR << " represent a flaged cell\n"
+         << EMPTY_CELL_CHAR << " represent an empty cell\n"
+         << endl;
+    //TODO Game Instructions
 }
 
 //Validation
