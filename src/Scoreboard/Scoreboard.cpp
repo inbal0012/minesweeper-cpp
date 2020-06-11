@@ -113,7 +113,7 @@ void Scoreboard::saveScoreboard()
 void Scoreboard::printScoreboard()
 {
 
-    int i = 0;
+    int i = 1;
     for (const ScoreboardEntry &entry : scores)
     {
         cout << i++ << ". " << ScoreboardEntryToSting(entry) << endl;
