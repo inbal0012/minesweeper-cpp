@@ -3,7 +3,8 @@
 #define _Game
 
 #include <iostream>
-#include <time.h> /* time_t, struct tm, difftime, time, mktime */
+#include <time.h>    /* time_t, struct tm, difftime, time, mktime */
+#include <windows.h> //color prints
 #include "../Board/Board.cpp"
 #include "../Scoreboard/Scoreboard.cpp"
 #include "../Strings.cpp"
@@ -22,12 +23,13 @@ private:
     //prints
     void printHorizontalLine();
     void PrintBoard(bool showAll = false);
-    void PrintColoredBoard(bool showAll = false);
-    void printColoredCell(int cellValue);
-    void printCell(Cell &cell);
-    void setcolor(string C);
     void printSymbleIndexAndGameInstructions();
     void printTime();
+    //Color Print
+    void PrintColoredBoard(bool showAll = false);
+    void printColoredCell(int cellValue);
+    void printCell(Cell &cell, bool showAll = false);
+    void setcolor(string C);
 
     //Validation
     bool inputValidation(char commend, int row, int col);
