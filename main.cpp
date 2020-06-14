@@ -21,6 +21,8 @@ int main()
 
     win if width*hight - openCells (int) == mines
 
+    game -> singleton
+
     scoreboard per standart board (Begginers, Inter, Expert, Insane) 
     selectBoard OR customize board  
      */
