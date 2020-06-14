@@ -134,13 +134,13 @@ std::vector<pair<point, Cell *>> Board::getAllNeighbors(int row, int col)
 void Board::openCell(int row, int col)
 {
     Cell &cell = cells(row, col);
-    openCells++;
 
     if (cell.IS_FLAG)
     {
         return;
     }
     cell.state = State::open;
+    openCells++;
     if (cell.IS_BOMB)
     {
         lose = true;
@@ -223,13 +223,15 @@ void Board::seeEnough(int row, int col)
 }
 void Board::checkBoard()
 {
+    bool openWin = height * width - openCells == mines - flags;
     for (const auto &entry : cells)
     {
         auto key_pair = entry.first;
         Cell cell = entry.second;
         if (cell.state == State::close)
         {
-            openCell(key_pair.first, key_pair.second);
+            if (!openWin)
+                openCell(key_pair.first, key_pair.second);
         }
     }
 

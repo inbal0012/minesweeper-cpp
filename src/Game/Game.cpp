@@ -50,7 +50,7 @@ void Game::PrintBoard(bool showAll)
             Cell &cell = b->getCellAt(i, j);
             char v = CLOSE_CELL_CHAR;
             if (cell.IS_OPEN || showAll)
-                v = char(cell.value < 0 ? BOMB_CELL_CHAR : cell.IS_EMPTY ? EMPTY_CELL_CHAR : cell.value + '0'); //nested lamda. if bomb - x, if empty -> ' ', else show num
+                v = char(cell.value < 0 ? BOMB_CELL_CHAR : cell.IS_EMPTY ? EMPTY_CELL_CHAR : cell.value + '0'); //nested lambda. if bomb - x, if empty -> ' ', else show num
             else if (cell.IS_FLAG)
                 v = FLAG_CELL_CHAR;
 
@@ -368,7 +368,7 @@ bool Game::checkAmbiguity(int row, int col)
 
 bool Game::checkWin()
 {
-    if (b->getMines() == b->getFlags() || (b->getHeight() * b->getWidth() - b->getOpenCells()) == (b->getMines() - b->getFlags()))
+    if (b->getMines() == b->getFlags() || ((b->getHeight() * b->getWidth() - b->getOpenCells()) == (b->getMines() - b->getFlags())))
     {
         b->checkBoard();
     }
