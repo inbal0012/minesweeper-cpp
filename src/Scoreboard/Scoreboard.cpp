@@ -12,7 +12,6 @@
 class Scoreboard
 {
 private:
-    /* data */
     vector<ScoreboardEntry> scores;
 
 public:
@@ -53,7 +52,7 @@ void Scoreboard::getScoreboard()
             {
                 // ERROR
             }
-            string tMin = time.substr(0, timeSplitPos), tSec = time.substr(timeSplitPos + timeDelimiter.length());
+            string tMin = time.substr(0, timeSplitPos), tSec = time.substr(timeSplitPos + timeDelimiter.length()); //split the time string into min & sec String
             int cTime = stoi(tMin) * 60 + stoi(tSec);
             ScoreboardEntry score;
             score.timeInt = cTime;
@@ -97,7 +96,6 @@ void Scoreboard::addToScoreboard(const ScoreboardEntry &newScore)
 
 void Scoreboard::saveScoreboard()
 {
-
     ofstream fScoreboard;
     fScoreboard.open("scoreboard.txt");
     if (fScoreboard.is_open())

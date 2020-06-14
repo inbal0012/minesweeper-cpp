@@ -15,7 +15,6 @@ using namespace std;
 #define cells(row, col) (cells[make_pair(row, col)])
 
 typedef std::pair<int, int> point;
-typedef std::map<point, Cell> matrix;
 
 class Board
 {
