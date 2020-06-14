@@ -42,7 +42,10 @@
         "iterator": "cpp",
         "map": "cpp",
         "xtree": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "forward_list": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp"
     },
     "cSpell.words": [
         "nbrs",

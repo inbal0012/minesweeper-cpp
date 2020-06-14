@@ -10,7 +10,7 @@ Game::~Game()
 void Game::Play()
 {
     settings();
-    PrintBoard(true);
+    PrintColoredBoard(true);
 
     clickHandler();
     startTime = time(NULL);
@@ -78,7 +78,7 @@ void Game::PrintColoredBoard(bool showAll)
         for (int j = 0; j < b->getWidth(); ++j)
         {
             Cell &cell = b->getCellAt(i, j);
-            printCell(cell);
+            printCell(cell, showAll);
         }
         std::cout << "|" << endl;
         printHorizontalLine();
@@ -121,15 +121,11 @@ void Game::printColoredCell(int cellValue)
     cout << char(cellValue + '0');
     setcolor("default");
 }
-void Game::printCell(Cell &cell)
+void Game::printCell(Cell &cell, bool showAll)
 {
     cout << "| ";
     char v = CLOSE_CELL_CHAR;
-    if (cell.IS_CLOSE)
-    {
-        cout << CLOSE_CELL_CHAR;
-    }
-    else if (cell.IS_OPEN)
+    if (cell.IS_OPEN || showAll)
     {
         if (cell.value < 0)
         {
@@ -144,13 +140,18 @@ void Game::printCell(Cell &cell)
             printColoredCell(cell.value);
         }
     }
+    else if (cell.IS_CLOSE)
+    {
+        cout << CLOSE_CELL_CHAR;
+    }
     else if (cell.IS_FLAG)
         cout << FLAG_CELL_CHAR;
 
     std::cout << " ";
 }
 void Game::setcolor(string C)
-{ //Source http://mypccourse.com/cosc1436/book/chapter21.html
+{
+    //Source http://mypccourse.com/cosc1436/book/chapter21.html
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     if (C == "gray" || C == "default")
         SetConsoleTextAttribute(h, 7);
