@@ -39,9 +39,9 @@ bool Board::createBoard()
     int placedMines = 0;
     while (placedMines < mines)
     {
-        int num = rand() % (height * width);
-        int col = num % width;
-        int row = num / width;
+        int randomMineLocation = rand() % (height * width);
+        int col = randomMineLocation % width;
+        int row = randomMineLocation / width;
 
         if (!inBoard(row, col))
         {
