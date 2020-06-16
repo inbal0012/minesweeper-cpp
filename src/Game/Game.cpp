@@ -31,16 +31,20 @@ void Game::printHorizontalLine()
         std::cout << "---+";
     std::cout << "\n";
 }
-void Game::PrintBoard(bool showAll)
+void printColsNums(int size)
 {
+
     std::cout << "0 ";
-    for (int i = 0; i < b->getWidth(); ++i)
+    for (int i = 0; i < size; ++i)
         std::cout
             << "| " << (i + 1) % 10 << " ";
 
     std::cout << "|"; // the right bar
     std::cout << "\n";
-
+}
+void Game::PrintBoard(bool showAll)
+{
+    printColsNums(b->getWidth());
     printHorizontalLine();
     for (int i = 0; i < b->getHeight(); i++)
     {
@@ -63,14 +67,7 @@ void Game::PrintBoard(bool showAll)
 
 void Game::PrintColoredBoard(bool showAll)
 {
-    std::cout << "0 ";
-    for (int i = 0; i < b->getWidth(); ++i)
-        std::cout
-            << "| " << (i + 1) % 10 << " ";
-
-    std::cout << "|"; // the right bar
-    std::cout << "\n";
-
+    printColsNums(b->getWidth());
     printHorizontalLine();
     for (int i = 0; i < b->getHeight(); i++)
     {
