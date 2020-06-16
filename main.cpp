@@ -3,6 +3,7 @@
 #include "src/Game/Game.cpp"
 #include "src/Scoreboard/ScoreboardEntry.cpp"
 #include "src/Scoreboard/Scoreboard.cpp"
+#include "src/unrelated_que.cpp"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ int main()
     If clsNbrs+flags == value then flagNbrs.
 
     strategy -> code duplications
-    factory -> getNewBoard 
+    factory -> Board -> regular, hexagonal, triangular, multiple mines in cell
     + files -> score board
     timer -> threads?
     last action -> color? 
@@ -26,6 +27,7 @@ int main()
     scoreboard per standart board (Begginers, Inter, Expert, Insane) 
     selectBoard OR customize board  
      */
+    // checkFuncs();
 
     Game g = Game();
     g.Play();
